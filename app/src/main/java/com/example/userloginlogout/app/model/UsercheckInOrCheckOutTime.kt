@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "User_CheckIn_CheckOut_Time_Log")
 class UsercheckInOrCheckOutTime {
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
     @NonNull
-    @PrimaryKey
     var employeeCode: String? = null
     var checkIn: String? = null
     var checkOut: String? = null

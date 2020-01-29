@@ -6,9 +6,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.userloginlogout.R
 import com.example.userloginlogout.app.DatabaseClient
+import com.example.userloginlogout.app.fragment.CheckInCheckOutDialogFragment
 import com.example.userloginlogout.app.model.UserInfo
 import kotlinx.android.synthetic.main.user_edit_delete_activity.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class UserEditDeleteActivity : AppCompatActivity() {
 
@@ -89,12 +93,24 @@ class UserEditDeleteActivity : AppCompatActivity() {
 
 
         showUserCheckInCheckOutLog.setOnClickListener {
-           /* CoroutineScope(Dispatchers.IO).launch {
-                val checkIncheckOut = DatabaseClient.getInstance(applicationContext).appDatabase.userDao()
-                        .getAllCheckInCheckOutTime(employeeId = id)
-                MainScope()
+            try {
+                val bundle = Bundle()
+                bundle.putString("id", id)
+                val checkInCheckOutDialogFragment = CheckInCheckOutDialogFragment()
+                checkInCheckOutDialogFragment.arguments = bundle
+                val fm = supportFragmentManager
+                checkInCheckOutDialogFragment.show(fm, "collectionAddPopUp")
+            } catch (e: Exception) {
+                Log.d("Exception", e.message)
+            }
 
-            }*/
+
+            /* CoroutineScope(Dispatchers.IO).launch {
+                 val checkIncheckOut = DatabaseClient.getInstance(applicationContext).appDatabase.userDao()
+                         .getAllCheckInCheckOutTime(employeeId = id)
+                 MainScope()
+
+             }*/
 
 
         }

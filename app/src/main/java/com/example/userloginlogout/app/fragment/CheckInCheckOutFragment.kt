@@ -52,7 +52,7 @@ class CheckInCheckOutFragment : Fragment() {
                         val hour = c.get(Calendar.HOUR)
                         val time = "$sec:$min:$hour"
                         val day = c.get(Calendar.DAY_OF_MONTH)
-                        val month = c.get(Calendar.MONTH)
+                        val month = c.get(Calendar.MONTH) + 1
                         val year = c.get(Calendar.YEAR)
                         val datee = "$day/$month/$year"
                         CoroutineScope(Dispatchers.IO).launch {
@@ -72,6 +72,7 @@ class CheckInCheckOutFragment : Fragment() {
                                             Toast.LENGTH_SHORT
                                     )
                                             .show()
+                                    activity?.finish()
                                 }
 
 
@@ -102,7 +103,7 @@ class CheckInCheckOutFragment : Fragment() {
                         val hour = c.get(Calendar.HOUR)
                         val time = "$sec:$min:$hour"
                         val day = c.get(Calendar.DAY_OF_MONTH)
-                        val month = c.get(Calendar.MONTH)
+                        val month = c.get(Calendar.MONTH) + 1
                         val year = c.get(Calendar.YEAR)
                         val datee = "$day/$month/$year"
                         CoroutineScope(Dispatchers.IO).launch {
@@ -124,6 +125,7 @@ class CheckInCheckOutFragment : Fragment() {
                                             "you successfully checkedOut",
                                             Toast.LENGTH_SHORT
                                     ).show()
+                                    activity?.finish()
                                 }
 
                             } else {

@@ -1,9 +1,9 @@
 package com.example.userloginlogout.app
 
+import android.database.Cursor
 import androidx.room.*
 import com.example.userloginlogout.app.model.UserInfo
 import com.example.userloginlogout.app.model.UsercheckInOrCheckOutTime
-import retrofit2.http.GET
 
 @Dao
 interface UserDao {
@@ -32,6 +32,11 @@ interface UserDao {
     @Query("SELECT * FROM User_CheckIn_CheckOut_Time_Log WHERE employeeCode LIKE :employeeId ")
     suspend fun getAllCheckInCheckOutTime(employeeId: String): List<UsercheckInOrCheckOutTime>
 
+    @Query("SELECT * FROM User_CheckIn_CheckOut_Time_Log WHERE employeeCode LIKE :employeeId")
+    fun getData(employeeId: String): Cursor
+
+    @Query("SELECT * FROM User_CheckIn_CheckOut_Time_Log")
+    fun getAllData(): Cursor
 
 }
 

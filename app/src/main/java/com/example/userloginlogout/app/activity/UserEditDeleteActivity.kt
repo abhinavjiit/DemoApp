@@ -1,21 +1,23 @@
 package com.example.userloginlogout.app.activity
 
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.database.getStringOrNull
 import com.example.userloginlogout.R
 import com.example.userloginlogout.app.DatabaseClient
 import com.example.userloginlogout.app.fragment.CheckInCheckOutDialogFragment
 import com.example.userloginlogout.app.model.UserInfo
+import com.opencsv.CSVWriter
 import kotlinx.android.synthetic.main.user_edit_delete_activity.*
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.io.File
+import java.io.FileWriter
 
 class UserEditDeleteActivity : AppCompatActivity() {
-
+    lateinit var id: String
     private val handler = CoroutineExceptionHandler { _, exception ->
         Log.d("Exception", "$exception handled !")
     }
@@ -24,7 +26,7 @@ class UserEditDeleteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_edit_delete_activity)
-        val id = intent.getStringExtra("id")
+        id = intent.getStringExtra("id")
         val pass = intent.getStringExtra("pass")
 
         CoroutineScope(Dispatchers.IO + handler).launch {
@@ -114,8 +116,40 @@ class UserEditDeleteActivity : AppCompatActivity() {
 
 
         }
+        userInfoHeaderTextView.setOnClickListener {
+            val file = File(Environment.getExternalStorageDirectory(), "EmployeeCode/$id")
+            if (!file.exists()) {
+                Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
 
+            }
+            val fileFolder = File(file, "$id + .csv")
+            try {
+                fileFolder.createNewFile()
+                val csvWriter = CSVWriter(FileWriter(fileFolder))
+                CoroutineScope(Dispatchers.IO).launch {
+                    val data = async { DatabaseClient.getInstance(applicationContext).appDatabase.userDao().getData(id) }
+                    val dataa = data.await()
+                    MainScope().launch {
+                        csvWriter.writeNext(dataa.columnNames)
+                        while (dataa.moveToNext()) {
+                            val empty = Array<String?>(dataa.columnCount) {
+                                null
+                            }
+                            for (i in 0 until dataa.columnCount ) {
+                                empty[i] = dataa.getStringOrNull(i)
+                            }
+                            csvWriter.writeNext(empty)
+                        }
+                        csvWriter.close()
+                        dataa.close()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("ExceptionException", e.message)
+                Toast.makeText(applicationContext, "data is deleted", Toast.LENGTH_SHORT).show()
 
+            }
+        }
     }
 
     private suspend fun fetchDataAsync(id: String, pass: String): List<UserInfo> {

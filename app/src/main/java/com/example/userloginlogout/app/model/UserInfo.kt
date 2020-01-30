@@ -19,4 +19,3 @@ class UserInfo {
     var checkIn: String? = null
     var checkOut: String? = null
 }
-

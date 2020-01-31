@@ -37,6 +37,8 @@ interface UserDao {
 
     @Query("SELECT * FROM User_CheckIn_CheckOut_Time_Log")
     fun getAllData(): Cursor
+    @Query("SELECT * FROM User_Detail")
+    fun getAllUserPersonalData(): Cursor
 
 }
 

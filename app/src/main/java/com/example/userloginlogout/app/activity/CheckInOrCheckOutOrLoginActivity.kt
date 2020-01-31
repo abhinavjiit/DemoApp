@@ -112,7 +112,7 @@ class CheckInOrCheckOutOrLoginActivity : AppCompatActivity(), View.OnClickListen
                 try {
                     val file = File(Environment.getExternalStorageDirectory(), "AllEmployeesTimeData")
                     if (!file.exists()) {
-                        Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
+                     //   Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
                         file.mkdir()
                     }
                     val fileFolder = File(file, "AllTimeData.csv")
@@ -146,17 +146,15 @@ class CheckInOrCheckOutOrLoginActivity : AppCompatActivity(), View.OnClickListen
                     Log.d("CSVAndNewFileException", e.message)
                     Toast.makeText(applicationContext, "data is deleted", Toast.LENGTH_SHORT).show()
                 }
-
             }
             R.id.downloadCSVFileAllUsersPersonalData -> {
                 try {
                     val file = File(Environment.getExternalStorageDirectory(), "AllEmployeesPersonalData")
                     if (!file.exists()) {
-                      //  Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
+                        //  Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
                         file.mkdir()
                     }
                     val fileFolder = File(file, "AllPersonalData.csv")
-
                     fileFolder.createNewFile()
                     val csvWriter = CSVWriter(FileWriter(fileFolder) as Writer?)
                     CoroutineScope(Dispatchers.IO).launch {
@@ -164,12 +162,17 @@ class CheckInOrCheckOutOrLoginActivity : AppCompatActivity(), View.OnClickListen
                         val dataa = data.await()
                         MainScope().launch {
                             try {
-                                csvWriter.writeNext(dataa.columnNames)
+                                val coloums = Array<String?>(dataa.columnCount) { null }
+
+                                for (i in 0 until dataa.columnCount - 2) {
+                                    coloums[i] = dataa.getColumnName(i)
+                                }
+                                csvWriter.writeNext(coloums)
                                 while (dataa.moveToNext()) {
-                                    val empty = Array<String?>(dataa.columnCount) {
+                                    val empty = Array<String?>(dataa.columnCount-2) {
                                         null
                                     }
-                                    for (i in 0 until dataa.columnCount) {
+                                    for (i in 0 until dataa.columnCount-2) {
                                         empty[i] = dataa.getStringOrNull(i)
                                     }
                                     csvWriter.writeNext(empty)
@@ -186,12 +189,7 @@ class CheckInOrCheckOutOrLoginActivity : AppCompatActivity(), View.OnClickListen
                     Log.d("CSVAndNewFileException", e.message)
                     Toast.makeText(applicationContext, "data is deleted", Toast.LENGTH_SHORT).show()
                 }
-
             }
-
-
         }
-
-
     }
 }

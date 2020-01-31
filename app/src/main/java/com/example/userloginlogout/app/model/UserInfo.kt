@@ -2,6 +2,7 @@ package com.example.userloginlogout.app.model
 
 import androidx.annotation.NonNull
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "User_Detail")
@@ -10,6 +11,7 @@ class UserInfo {
     @PrimaryKey
     var employeeCode: String? = null
     var name: String? = null
+    @Ignore
     var phoneNumber: String? = null
     var dob: String? = null
     @NonNull

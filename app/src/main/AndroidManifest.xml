@@ -20,7 +20,11 @@
 
         </activity>
 
-        <activity android:name=".app.activity.UserEditDeleteActivity" />
+        <activity
+            android:name=".app.activity.UserEditDeleteActivity"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
         <activity android:name=".app.activity.CheckInOrCheckOutOrLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

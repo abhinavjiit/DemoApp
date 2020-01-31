@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/userInfoHeaderTextView"
             android:layout_width="wrap_content"
@@ -18,44 +17,68 @@
             android:layout_marginTop="16dp"
             android:text=" Edit User Info"
             android:textColor="#000"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/showUserCheckInCheckOutLog"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_rectangular_border"
-            android:padding="8dp"
-            android:text=" all Time Logs"
-            android:textAllCaps="true"
-            android:textColor="#D54058"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/mainHeader"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/deleteUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/shape_rectangular_border"
-            android:padding="8dp"
-            android:text="Delete User"
-            android:textColor="#D54058"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/userInfoHeaderTextView"
             app:layout_constraintTop_toTopOf="parent"
             app:textAllCaps="true" />
+
+
+        <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_rectangular_border"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:weightSum="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userInfoHeaderTextView">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/showUserCheckInCheckOutLog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text=" User All time logs"
+                android:textAllCaps="true"
+                android:textColor="#D54058"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/downloadCSVFile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="download time data(CSV)"
+                android:textAllCaps="true"
+                android:textColor="#D54058"
+                android:textSize="16sp"
+
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/deleteUser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="Delete  User"
+                android:textAllCaps="true"
+                android:textColor="#D54058"
+                android:textSize="16sp"
+
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
 
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -68,7 +91,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userInfoHeaderTextView" />
+            app:layout_constraintTop_toBottomOf="@id/linear1" />
 
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -239,6 +262,7 @@
             android:textColor="#D54058"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/checkinTime"
             app:layout_constraintTop_toBottomOf="@id/emailEditTextView" />
@@ -277,6 +301,7 @@
             android:textColor="#D54058"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/checkoutTime"
             app:layout_constraintTop_toBottomOf="@id/checkinEditTextView" />

@@ -19,7 +19,7 @@ import java.io.FileWriter
 class UserEditDeleteActivity : AppCompatActivity() {
     lateinit var id: String
     private val handler = CoroutineExceptionHandler { _, exception ->
-        Log.d("Exception", "$exception handled !")
+        Log.d("CoroutineException", "$exception handled !")
     }
 
     private var getData: List<UserInfo>? = null
@@ -55,6 +55,8 @@ class UserEditDeleteActivity : AppCompatActivity() {
             userInfo.dob = DobEditTextView.text.toString()
             userInfo.name = nameEditTextView.text.toString()
             userInfo.employeeCode = employeeCodeEditTextView.text.toString()
+            userInfo.checkOut = checkoutEdittextView.text.toString()
+            userInfo.checkIn = checkinEditTextView.text.toString()
             CoroutineScope(Dispatchers.IO + handler).launch {
                 DatabaseClient.getInstance(applicationContext).appDatabase.userDao()
                         .updateUser(userInfo)
@@ -68,6 +70,8 @@ class UserEditDeleteActivity : AppCompatActivity() {
                         passwordEditTextView.setText(getData?.get(0)?.password)
                         phoneNumberEditTextView.setText(getData?.get(0)?.contactNumber)
                         emailEditTextView.setText(getData?.get(0)?.email)
+                        checkinEditTextView.setText(getData?.get(0)?.checkIn)
+                        checkoutEdittextView.setText(getData?.get(0)?.checkOut)
                     }
                     Toast.makeText(applicationContext, "data is updated", Toast.LENGTH_SHORT).show()
                 }
@@ -89,8 +93,6 @@ class UserEditDeleteActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "data is deleted", Toast.LENGTH_SHORT).show()
                 }
             }
-
-
         }
 
 
@@ -103,7 +105,7 @@ class UserEditDeleteActivity : AppCompatActivity() {
                 val fm = supportFragmentManager
                 checkInCheckOutDialogFragment.show(fm, "collectionAddPopUp")
             } catch (e: Exception) {
-                Log.d("Exception", e.message)
+                Log.d("DialogFragmentException", e.message)
             }
 
 
@@ -116,11 +118,11 @@ class UserEditDeleteActivity : AppCompatActivity() {
 
 
         }
-        userInfoHeaderTextView.setOnClickListener {
+        downloadCSVFile.setOnClickListener {
             val file = File(Environment.getExternalStorageDirectory(), "EmployeeCode/$id")
             if (!file.exists()) {
                 Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
-
+                file.mkdir()
             }
             val fileFolder = File(file, "$id + .csv")
             try {
@@ -130,24 +132,27 @@ class UserEditDeleteActivity : AppCompatActivity() {
                     val data = async { DatabaseClient.getInstance(applicationContext).appDatabase.userDao().getData(id) }
                     val dataa = data.await()
                     MainScope().launch {
-                        csvWriter.writeNext(dataa.columnNames)
-                        while (dataa.moveToNext()) {
-                            val empty = Array<String?>(dataa.columnCount) {
-                                null
+                        try {
+                            csvWriter.writeNext(dataa.columnNames)
+                            while (dataa.moveToNext()) {
+                                val empty = Array<String?>(dataa.columnCount) {
+                                    null
+                                }
+                                for (i in 0 until dataa.columnCount) {
+                                    empty[i] = dataa.getStringOrNull(i)
+                                }
+                                csvWriter.writeNext(empty)
                             }
-                            for (i in 0 until dataa.columnCount ) {
-                                empty[i] = dataa.getStringOrNull(i)
-                            }
-                            csvWriter.writeNext(empty)
+                            csvWriter.close()
+                            dataa.close()
+                        } catch (e: Exception) {
+                            Log.d("CSVFileWriteException", e.message)
                         }
-                        csvWriter.close()
-                        dataa.close()
                     }
                 }
             } catch (e: Exception) {
-                Log.d("ExceptionException", e.message)
+                Log.d("CSVAndNewFileException", e.message)
                 Toast.makeText(applicationContext, "data is deleted", Toast.LENGTH_SHORT).show()
-
             }
         }
     }

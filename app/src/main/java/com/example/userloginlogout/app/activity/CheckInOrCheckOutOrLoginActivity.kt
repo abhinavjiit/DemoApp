@@ -112,7 +112,7 @@ class CheckInOrCheckOutOrLoginActivity : AppCompatActivity(), View.OnClickListen
                 try {
                     val file = File(Environment.getExternalStorageDirectory(), "AllEmployeesTimeData")
                     if (!file.exists()) {
-                     //   Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
+                        //   Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
                         file.mkdir()
                     }
                     val fileFolder = File(file, "AllTimeData.csv")
@@ -169,10 +169,10 @@ class CheckInOrCheckOutOrLoginActivity : AppCompatActivity(), View.OnClickListen
                                 }
                                 csvWriter.writeNext(coloums)
                                 while (dataa.moveToNext()) {
-                                    val empty = Array<String?>(dataa.columnCount-2) {
+                                    val empty = Array<String?>(dataa.columnCount - 2) {
                                         null
                                     }
-                                    for (i in 0 until dataa.columnCount-2) {
+                                    for (i in 0 until dataa.columnCount - 2) {
                                         empty[i] = dataa.getStringOrNull(i)
                                     }
                                     csvWriter.writeNext(empty)
@@ -192,4 +192,5 @@ class CheckInOrCheckOutOrLoginActivity : AppCompatActivity(), View.OnClickListen
             }
         }
     }
+
 }

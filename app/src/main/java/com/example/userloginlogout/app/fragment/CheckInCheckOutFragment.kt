@@ -1,5 +1,6 @@
 package com.example.userloginlogout.app.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.userloginlogout.R
 import com.example.userloginlogout.app.DatabaseClient
+import com.example.userloginlogout.app.activity.CheckInOrCheckOutOrLoginActivity
 import com.example.userloginlogout.app.model.UsercheckInOrCheckOutTime
 import kotlinx.android.synthetic.main.checkin_checkout_fragment.view.*
 import kotlinx.android.synthetic.main.checkint_checkout_login_activity.view.employeeCodeEditTextView
@@ -72,7 +74,12 @@ class CheckInCheckOutFragment : Fragment() {
                                             Toast.LENGTH_SHORT
                                     )
                                             .show()
-                                    activity?.finish()
+                                    if (activity is CheckInOrCheckOutOrLoginActivity) {
+                                        activity?.finish()
+                                    } else {
+                                        val intent = Intent(activity, CheckInOrCheckOutOrLoginActivity::class.java)
+                                        startActivity(intent)
+                                    }
                                 }
 
 

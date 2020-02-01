@@ -24,30 +24,31 @@ class UserSignInOrSignUpActivity : AppCompatActivity() {
             val employeeCode = employeeCodeEditTextView.text.toString()
             val pass = passwordEditTextView.text.toString()
             CoroutineScope(Dispatchers.IO)
-                .launch {
-                    getData = DatabaseClient.getInstance(applicationContext).appDatabase.userDao()
-                        .getDataAsync(employeeCode, pass)
-                    delay(1000)
-                    CoroutineScope(Dispatchers.Main).launch {
-                        if (!getData.isNullOrEmpty()) {
-                            val intent = Intent(
-                                this@UserSignInOrSignUpActivity,
-                                UserEditDeleteActivity::class.java
-                            )
-                            intent.putExtra("id", employeeCode)
-                            intent.putExtra("pass", pass)
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(
-                                this@UserSignInOrSignUpActivity,
-                                "not a user",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                    .launch {
+                        getData = DatabaseClient.getInstance(applicationContext).appDatabase.userDao()
+                                .getDataAsync(employeeCode, pass)
+                        delay(1000)
+                        CoroutineScope(Dispatchers.Main).launch {
+                            if (!getData.isNullOrEmpty()) {
+                                val intent = Intent(
+                                        this@UserSignInOrSignUpActivity,
+                                        UserEditDeleteActivity::class.java
+                                )
+                                intent.putExtra("id", employeeCode)
+                                intent.putExtra("pass", pass)
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                Toast.makeText(
+                                        this@UserSignInOrSignUpActivity,
+                                        "not a user",
+                                        Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
                         }
 
                     }
-
-                }
         }
         signUpTextView.setOnClickListener {
             val intent = Intent(this, UserInfoActivity::class.java)

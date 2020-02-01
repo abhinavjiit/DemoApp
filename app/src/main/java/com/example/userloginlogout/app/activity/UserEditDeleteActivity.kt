@@ -92,6 +92,7 @@ class UserEditDeleteActivity : AppCompatActivity() {
                         .deleteUser(userInfo)
                 CoroutineScope(Dispatchers.Main + handler).launch {
                     Toast.makeText(applicationContext, "data is deleted", Toast.LENGTH_SHORT).show()
+                    onBackPressed()
                 }
             }
         }

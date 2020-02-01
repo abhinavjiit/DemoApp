@@ -1,5 +1,6 @@
 package com.example.userloginlogout.app.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -119,13 +120,13 @@ class UserEditDeleteActivity : AppCompatActivity() {
 
         }
         downloadCSVFile.setOnClickListener {
-            val file = File(Environment.getExternalStorageDirectory(), "EmployeeCode/$id")
-            if (!file.exists()) {
-                Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
-                file.mkdir()
-            }
-            val fileFolder = File(file, "$id + .csv")
             try {
+                val file = File(Environment.getExternalStorageDirectory(), "EmployeeCode/$id")
+                if (!file.exists()) {
+                    Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
+                    file.mkdir()
+                }
+                val fileFolder = File(file, "$id.csv")
                 fileFolder.createNewFile()
                 val csvWriter = CSVWriter(FileWriter(fileFolder))
                 CoroutineScope(Dispatchers.IO).launch {
@@ -143,6 +144,7 @@ class UserEditDeleteActivity : AppCompatActivity() {
                                 }
                                 csvWriter.writeNext(empty)
                             }
+                            Toast.makeText(applicationContext, "data downloading.....", Toast.LENGTH_SHORT).show()
                             csvWriter.close()
                             dataa.close()
                         } catch (e: Exception) {
@@ -152,7 +154,7 @@ class UserEditDeleteActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Log.d("CSVAndNewFileException", e.message)
-                Toast.makeText(applicationContext, "data is deleted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "went wrong", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -160,5 +162,13 @@ class UserEditDeleteActivity : AppCompatActivity() {
     private suspend fun fetchDataAsync(id: String, pass: String): List<UserInfo> {
         return DatabaseClient.getInstance(applicationContext).appDatabase.userDao()
                 .getDataAsync(id, pass)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, CheckInOrCheckOutOrLoginActivity::class.java)
+        startActivity(intent)
+        finish()
+
     }
 }
